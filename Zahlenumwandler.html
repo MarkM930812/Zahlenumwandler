@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zahlensystem Umrechner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Zahlensystem Umrechner</h1>
+  <label for="number">Geben Sie die Zahl ein:</label>
+  <input type="text" id="number" placeholder="z.B. 1010, 7F, 123">
+
+  <label for="base">Wählen Sie das Zahlensystem:</label>
+  <select id="base">
+    <option value="2">Binär (Basis 2)</option>
+    <option value="8">Oktal (Basis 8)</option>
+    <option value="16">Hexadezimal (Basis 16)</option>
+  </select>
+
+  <button onclick="convertNumber()">In Dezimal umrechnen</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  // Hilfsfunktion zur Konvertierung eines Zeichens in seine Ziffern-Entsprechung
+  function charToDigit(c) {
+    if (c >= '0' && c <= '9') {
+      return c.charCodeAt(0) - '0'.charCodeAt(0);  // Ziffern von 0-9
+    } else {
+      return c.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 10;  // Buchstaben A-F
+    }
+  }
+
+  // Funktion zur Umwandlung der Zahl in Dezimal
+  function convertToDecimal(number, base) {
+    let decimalValue = 0;
+    let length = number.length;
+
+    for (let i = 0; i < length; i++) {
+      let currentChar = number.charAt(length - 1 - i);
+      let currentDigit = charToDigit(currentChar);
+
+      decimalValue += currentDigit * Math.pow(base, i);
+    }
+
+    return decimalValue;
+  }
+
+  // Hauptfunktion zur Umrechnung und Anzeige des Ergebnisses
+  function convertNumber() {
+    let inputNumber = document.getElementById("number").value;
+    let base = parseInt(document.getElementById("base").value);
+
+    // Überprüfen der Eingabe auf Gültigkeit
+    if (!isValidNumberForBase(inputNumber, base)) {
+      document.getElementById("result").innerHTML = "Ungültige Zahl für das gewählte Zahlensystem!";
+      return;
+    }
+
+    // Umwandlung der Zahl in Dezimal
+    let decimalValue = convertToDecimal(inputNumber, base);
+
+    // Ausgabe des Ergebnisses
+    document.getElementById("result").innerHTML = "Der Dezimalwert ist: " + decimalValue;
+  }
+
+  // Funktion zur Überprüfung, ob die Eingabe für das gewählte Zahlensystem gültig ist
+  function isValidNumberForBase(number, base) {
+    for (let i = 0; i < number.length; i++) {
+      let digit = charToDigit(number.charAt(i));
+
+      if (digit >= base) {
+        return false;
+      }
+    }
+    return true;
+  }
+</script>
+
+</body>
+</html>
